@@ -1,16 +1,18 @@
 <template>
   <div class="hello">
     <canvas id="tutorial" width="350" height="350"></canvas>
-	
+	<br/>
+	<p class="guassWord">要猜的词是：pig</p>
 	<button @click="clearDraw()">clear</button>
-	<p>{{x}},{{y}}</p>
+
   </div>
 </template>
 
 <script>
 
 export default {
-  name: 'HelloWorld',
+  name: 'DrawBoard',
+  props:['ws'],
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
@@ -20,7 +22,7 @@ export default {
     }
   },
   mounted: function(){
-	this.draw = new canvasDraw("tutorial");
+	this.draw = new canvasDraw("tutorial",this.ws);
 	this.draw.draw();
   },
   methods:{
@@ -30,8 +32,8 @@ export default {
   }
 }
 class canvasDraw{
-	constructor(id){
-		this.ws = new WebSocket('ws://localhost:3000/test');
+	constructor(id,ws){
+		this.ws= ws;
 		this.canvas = document.getElementById(id);
 		this.ctx = this.canvas.getContext('2d');
 		this.stage_info = this.canvas.getBoundingClientRect()
@@ -63,7 +65,7 @@ class canvasDraw{
 		}
         this.canvas.onmouseup = () => {
 			that.isDraw=false
-			that.ws.send('stop')
+			that.ws.send('stop,')
         }
 	}
 	drawing(e) {
@@ -74,12 +76,12 @@ class canvasDraw{
             this.path.endY
         )
         this.ctx.stroke()
-		this.ws.send(this.path.beginX+','+this.path.beginY+','+this.path.endX+','+this.path.endY)
-		
+		this.ws.send("draw"+','+this.path.beginX+','+this.path.beginY+','+this.path.endX+','+this.path.endY)
+			
     }
 	clearCanvas(){
 		this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height); 
-		this.ws.send('clear')
+		this.ws.send('clear,')
 	}
 }
 
@@ -88,4 +90,8 @@ class canvasDraw{
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #tutorial { border: 1px solid black; }
+.guassWord{
+	float:left;
+	margin: 0;
+}
 </style>
