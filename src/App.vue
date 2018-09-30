@@ -21,54 +21,54 @@ import DrawBoard from './components/DrawBoard'
 import ShowBoard from './components/ShowBoard'
 import TheSeats from './components/TheSeats'
 export default {
-  name: 'App',
-  components:{
-	DrawBoard,
-	ShowBoard,
-	TheSeats
-  },
-  data () {
-    return {
-	  x: 1,
-	  showLogin: 1,
-	  username: '',
-	  ws: '',
-	  msg:[],
-    }
-  },
-  mounted:function(){
-	if(!window.sessionStorage){
-		alert("浏览器不支持sessionStorage!");
-	}else{
-		let storage = window.sessionStorage;
-		let drawUsername=storage.getItem("drawUsername");
-		if(drawUsername!=null&&drawUsername!=''){
-				this.username=drawUsername;
-				this.showLogin=0;
-		}
-	}
-	this.ws = new WebSocket('ws://localhost:3000/test');
-	this.ws.onmessage = (message)=>{
-		console.log(message)
-		this.msg = message.data.split(',')
-	}
-  },
-  methods:{
-	beginGame(msg){
-		if(msg=="beginGame"){
-			this.x=0;
+	name: 'App',
+	components:{
+		DrawBoard,
+		ShowBoard,
+		TheSeats
+	},
+	data () {
+		return {
+			x: 1,
+			showLogin: 1,
+			username: '',
+			ws: '',
+			msg:[],
 		}
 	},
-	login(){
-		this.showLogin=0;
+	mounted:function(){
 		if(!window.sessionStorage){
 			alert("浏览器不支持sessionStorage!");
 		}else{
-			var storage = window.sessionStorage;
-			storage.setItem("drawUsername",this.username);
+			let storage = window.sessionStorage;
+			let drawUsername=storage.getItem("drawUsername");
+			if(drawUsername!=null&&drawUsername!=''){
+				this.username=drawUsername;
+				this.showLogin=0;
+			}
+		}
+		this.ws = new WebSocket('ws://localhost:3000/');
+		this.ws.onmessage = (message)=>{
+			console.log(message)
+			this.msg = message.data.split(',')
+		}
+	},
+	methods:{
+		beginGame(msg){
+			if(msg=="beginGame"){
+				this.x=0;
+			}
+		},
+		login(){
+			this.showLogin=0;
+			if(!window.sessionStorage){
+				alert("浏览器不支持sessionStorage!");
+			}else{
+				var storage = window.sessionStorage;
+				storage.setItem("drawUsername",this.username);
+			}
 		}
 	}
-  }
 }
 </script>
 

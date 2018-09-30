@@ -13,7 +13,6 @@ wss.on('connection', function (ws) {
     console.log(`[SERVER] connection()`);
     ws.on('message', function (message) {
         console.log(`[SERVER] Received: ${message}`);
-		
         wss.clients.forEach((client) => {
                 client.send(message)
          })
