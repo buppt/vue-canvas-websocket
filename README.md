@@ -32,6 +32,6 @@ npm run dev
 <img src='./structure.PNG' />
 
 ## 项目截图
-<img src='./login.gif' width='70%'/>
+<img src='./static/login.gif' width='90%'/>
 <br/>
-<img src='./draw.gif'  width='70%'/>
+<img src='./static/draw.gif'  width='90%'/>

@@ -1,9 +1,7 @@
 <template>
-  <div>
-	<div>
-		<home-header></home-header>
-		<home-content></home-content>
-	</div>
+  <div class = 'homePage'>
+	<home-header></home-header>
+	<home-content></home-content>
   </div>
 </template>
 
@@ -39,5 +37,8 @@ export default {
 </script>
 
 <style scoped>
-
+.homePage{
+	height: 100%;
+	background-image: url('/static/background.jpg')
+}
 </style>

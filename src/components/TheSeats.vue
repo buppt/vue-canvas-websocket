@@ -2,7 +2,7 @@
 
   <div class="seatContent">
     <div v-for="(seat,index) in seats" :key="index" class="seats-block">
-		<button type="primary" plain class="seat-num" @click="seatDown(index)" @mouseover="toggleShow(index)" @mouseout="toggleShow(index)">{{seat}}</button>
+		<button type="primary" plain class="seat-num" :class="seat=='空位'?'blue':'green'" @click="seatDown(index)" @mouseover="toggleShow(index)" @mouseout="toggleShow(index)">{{seat}}</button>
 	</div>
   </div>
   <!-- <button v-if="seats[0]==username" class="startButton" @click="beginGame()">开始游戏</button>
@@ -120,8 +120,7 @@ export default {
 		width: 15%;
 		.seat-num{
 			color: #fff;
-			background-color: #409eff;
-			border-color: #409eff;
+			border: 0;
 			border-radius: 20px;
 			padding: 12px 23px;
 			line-height: 1;
@@ -130,7 +129,12 @@ export default {
 		}
 	}
 }
-
+.blue{
+	background-color: #409eff;
+}
+.green{
+	background-color: #67c23a;
+}
 
 // .seat-num:hover{
 // 	cursor: pointer;

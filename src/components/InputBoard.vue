@@ -49,6 +49,7 @@ export default {
         width: 65%;
         border: 0px;
         outline:none;
+		background-color:transparent;
     }
     .submitButton{
         height: 100%;
