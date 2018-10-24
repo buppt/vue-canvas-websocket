@@ -1,57 +1,61 @@
 <template>
-<div class="seatVue">
+
   <div class="seatContent">
     <div v-for="(seat,index) in seats" :key="index" class="seats-block">
-		<p  class="guassWord">{{guassWord[index]}}</p>
-		<button  class="seat-num" @click="seatDown(index)" @mouseover="toggleShow(index)" @mouseout="toggleShow(index)">{{seat}}</button>
-		
+		<button type="primary" plain class="seat-num" @click="seatDown(index)" @mouseover="toggleShow(index)" @mouseout="toggleShow(index)">{{seat}}</button>
 	</div>
-	<br/>
   </div>
-  <button v-if="seats[0]==username" class="startButton" @click="beginGame()">开始游戏</button>
+  <!-- <button v-if="seats[0]==username" class="startButton" @click="beginGame()">开始游戏</button>
   <button v-else class="startButton">一楼房主</button>
   <div class="clear"></div>
-	<input type="text" class="guassInput" v-model="inputWord"/>
-	<button @click="submitInput()">发送</button>
-</div>
+	<input type="text" class="guassInput" v-model="inputWord" @keydown.enter="submitInput"/>
+	<button @click="submitInput()">发送</button> -->
+
 </template>
 
 <script>
 
 export default {
   name: 'TheSeats',
-  props:['username','ws','msg'],
   data () {
     return {
       buttonShow: '空位',
 	  seats:['空位','空位','空位','空位','空位','空位'],
-	  mySeat: -1,
-	  guassWord: ['','','','','',''],
-	  inputWord: '',
     }
   },
   mounted: function(){
-	
+
   },
   watch:{
-	msg(newval,oldval){
-		if(this.msg[0]=="seats"&&this.msg.length==3){
+		msg(newval,oldval){
 			for(let i=0;i<this.seats.length;i++){
 				if(this.seats[i]==this.msg[2]){
 					this.seats[i]='空位';
 				}
 			}
 			this.seats.splice(this.msg[1],1,this.msg[2]);
-		}else if(this.msg[0]=="input"&&this.msg.length==3){
-			this.guassWord.splice(this.msg[1],1,this.msg[2]);
-			setTimeout(()=>{
-				this.guassWord.splice(this.msg[1],1,'');
-			},2000);
+			// }else if(this.msg[0]=="input"&&this.msg.length==3){
+			// 	this.guassWord.splice(this.msg[1],1,this.msg[2]);
+			// 	setTimeout(()=>{
+			// 		this.guassWord.splice(this.msg[1],1,'');
+			// 	},2000);
+			// }
 		}
-	}
   },
+  computed:{
+        username(){
+            return this.$store.state.username.username;
+		},
+		msg(){
+			return this.$store.state.wsStore.seats;
+		},
+    },
   methods:{
-	seatDown:function(index){
+	seatDown(index){
+		if(this.username==null||this.username==''){
+			this.$message('请登陆');
+			return
+		}
 		if(this.seats[index]=='坐下'){
 			for(let i=0;i<this.seats.length;i++){
 				if(this.seats[i]==this.username){
@@ -59,8 +63,10 @@ export default {
 				}
 			}
 			this.seats.splice(index,1,this.username);
-			this.mySeat=index;
-			this.ws.send("seats"+','+index+','+this.username);
+			//console.log(ws)
+			this.$store.state.wsStore.ws.send(`seats,${index},${this.username}`);
+		}else{
+			this.$message('此位置有人');
 		}		
 	},
 	toggleShow(index){
@@ -101,42 +107,47 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.seatVue{
-	text-align: left;
-}
+<style lang='less' scoped>
+
 .seatContent { 
-	float:left;
-	border: 1px solid black; 
-	width: 100px;
-	height: 350px;
+	width: 100%;
+	height: 100%;
 	text-align: center;
-	display: flex;
-	flex-direction: column;
+	display: inline-flex;
 	justify-content: space-around;
+	align-items: center; 
+	.seats-block{
+		width: 15%;
+		.seat-num{
+			color: #fff;
+			background-color: #409eff;
+			border-color: #409eff;
+			border-radius: 20px;
+			padding: 12px 23px;
+			line-height: 1;
+			white-space: nowrap;
+			cursor: pointer;
+		}
 	}
-.seats-block{
-	border: 1px solid black; 
-	height: 10%;
-	position: relative;
 }
 
-.seat-num:hover{
-	cursor: pointer;
-}
-.guassWord{
-	position: absolute;
-	left: -50px;
-	margin: 0;
-}
-.startButton{
-	float: right;
-}
-.clear{
-	clear: both;
-}
-.guassInput{
-	margin:0;
-	width: 100px;
-}
+
+// .seat-num:hover{
+// 	cursor: pointer;
+// }
+// .guassWord{
+// 	position: absolute;
+// 	left: -50px;
+// 	margin: 0;
+// }
+// .startButton{
+// 	float: right;
+// }
+// .clear{
+// 	clear: both;
+// }
+// .guassInput{
+// 	margin:0;
+// 	width: 100px;
+// }
 </style>

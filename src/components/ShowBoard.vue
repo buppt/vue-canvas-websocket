@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas id="showing" width="350" height="350"></canvas>
+    <canvas id="showing" width="650" height="400"></canvas>
   </div>
 </template>
 
@@ -8,19 +8,18 @@
 
 export default {
 	name: 'ShowBoard',
-	props:['ws','msg'],
 	data () {
 		return {
 			canvas: '',
 			ctx:'',
 			draw: '',
-			isDraw :1
+			isDraw :1,
 		}
 	},
 	mounted: function(){
 		this.canvas = document.getElementById('showing')
 		this.ctx = this.canvas.getContext('2d')
-		this.ctx.strokeStyle = "#000"
+		this.ctx.strokeStyle = "#000";
 	},
 	watch:{
 		msg(newval,oldval){
@@ -39,10 +38,16 @@ export default {
 			}
 		}
 	},
+	computed:{
+		msg(){
+			return this.$store.state.wsStore.draw;
+		},
+    },
 	methods:{
 		clearDraw:function(){
 			this.draw.clearCanvas();
-		}
+		},
+		
 	}
 }
 

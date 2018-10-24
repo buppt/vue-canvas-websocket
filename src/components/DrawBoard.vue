@@ -1,10 +1,10 @@
 <template>
   <div class="hello">
-    <canvas id="drawBoard" width="350" height="350"></canvas>
+    <canvas id="drawBoard" width="650" height="400"></canvas>
 	<br/>
-	<p class="guassWord">要猜的词是：{{guassWord}}</p>
-	<button @click="clearDraw()">clear</button>
-
+	<div class="guassWord">要猜的词是：{{guassWord}}</div>
+	<button class="clearButton" @click="clearDraw()">clear</button>
+	<div class="clear"></div>
   </div>
 </template>
 
@@ -12,7 +12,6 @@
 
 export default {
   name: 'DrawBoard',
-  props:['ws'],
   data () {
     return {
 			guassWord: 'pig',
@@ -20,7 +19,7 @@ export default {
     }
   },
   mounted: function(){
-		this.draw = new canvasDraw("drawBoard",this.ws);
+		this.draw = new canvasDraw("drawBoard",this.$store.state.wsStore.ws);
 		this.draw.draw();
   },
   methods:{
@@ -74,7 +73,7 @@ class canvasDraw{
 			this.path.endY
 		)
 		this.ctx.stroke()
-		this.ws.send("draw"+','+this.path.beginX+','+this.path.beginY+','+this.path.endX+','+this.path.endY)
+		this.ws.send(`draw,${this.path.beginX},${this.path.beginY},${this.path.endX},${this.path.endY}`)
 
 	}
 	clearCanvas(){
@@ -91,7 +90,14 @@ class canvasDraw{
 	border: 1px solid black; 
 }
 .guassWord{
-	float:left;
-	margin: 0;
+	float: left;
+	margin-left: 20px;
+}
+.clearButton{
+	margin-right: 20px;
+	float: right;
+}
+.clear{
+	clear:both;
 }
 </style>
