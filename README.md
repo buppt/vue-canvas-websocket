@@ -1,9 +1,5 @@
 # vue+canvas+websocket+less
 
-<img src='./login.gif' />
-<br/>
-<img src='./draw.gif' />
-
 ## Build Setup
 
 ```
@@ -20,7 +16,7 @@ npm run dev
 - [x] 登录，登录后username存储到了sessionStorage中。
 - [x] 座位，登录后可以选择座位，并通过ws告诉所有人你的座位。
 - [x] 发送内容，登录后可以通过ws将输入内容发布给所有人。
-- [x] 聊天记录，可以接受所有人的聊天打字内容。
+- [x] 聊天记录，可以接收所有人的聊天打字内容。
 - [x] 画图，目前只能通过点击“我要画”按钮进行画图。
 - [x] 接收画图，默认情况或点击“我要猜”按钮可以查看他人画图。
 - [ ] 开始游戏
@@ -34,3 +30,8 @@ npm run dev
 ## 项目架构
 
 <img src='./structure.PNG' />
+
+## 项目截图
+<img src='./login.gif' width='70%'/>
+<br/>
+<img src='./draw.gif'  width='70%'/>
