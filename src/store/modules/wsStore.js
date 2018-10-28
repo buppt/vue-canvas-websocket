@@ -1,6 +1,6 @@
 const state = {
     ws: null,
-    seats: [],
+    seats: ['空位','空位','空位','空位','空位','空位'],
     chat:[],
     draw:[]
 }

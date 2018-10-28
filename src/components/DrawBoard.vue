@@ -1,8 +1,8 @@
 <template>
-  <div class="hello">
+  <div>
     <canvas id="drawBoard" width="650" height="400"></canvas>
 	<br/>
-	<div class="guassWord">要猜的词是：{{guassWord}}</div>
+	<div class="guassWord">要画的词是：{{guassWord}}</div>
 	<button class="clearButton" @click="clearDraw()">clear</button>
 	<div class="clear"></div>
   </div>
@@ -86,9 +86,9 @@ class canvasDraw{
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#drawBoard { 
+/* #drawBoard { 
 	border: 1px solid black; 
-}
+} */
 .guassWord{
 	float: left;
 	margin-left: 20px;

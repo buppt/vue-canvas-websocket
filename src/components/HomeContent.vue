@@ -3,10 +3,10 @@
 		<div class="content">
 			<div class="boardleft">
 				<div class="showBoard">
-					<draw-board v-if="x==0"></draw-board>
+					<div v-if="beginGame">当前画家：{{drawuser}}  剩余时间：{{second}}</div>
+					<div v-else>请等待一楼开始游戏</div>
+					<draw-board v-if="beginGame&&drawuser==username"></draw-board>
 					<show-board v-else></show-board>
-					<button v-show="x==1" class="testDraw" @click="draw">我要画</button>
-					<button v-show="x==0" class="testDraw" @click="draw">我要猜</button>
 				</div>
 				<the-seats class="seat"></the-seats>
 			</div>
@@ -39,13 +39,41 @@ export default {
 	data () {
 		return {
 			x: 1,
-			showLogin: 1,
+			second: 3,
+		}
+	},
+	computed:{
+		username(){
+            return this.$store.state.username.username;
+		},
+		drawuser(){
+			return this.$store.state.beginGame.drawUser;
+		},
+		beginGame(){
+			return this.$store.state.beginGame.beginGame;
+		}
+	},
+	watch:{
+		drawuser(newval,oldval){
+			console.log(newval)
+			this.second=3;
+			this.countDown();
 		}
 	},
 	methods:{
 		draw(){
 			this.x=!this.x;
 		},
+		countDown(){
+			console.log(this.second)
+			if(this.second>0){
+				let self = this;
+				setTimeout(()=>{
+					self.second--;
+					self.countDown();
+				},1000)
+			}
+		}
 	}
 }
 </script>
