@@ -1,7 +1,7 @@
 const state = {
     beginGame: false,
     drawUser:'',
-    second: 3,
+    drawWord: '',
 }
 
 const mutations = {
@@ -9,6 +9,7 @@ const mutations = {
         if(msg[0]=='begin'){
             state.beginGame=true;
             state.drawUser=msg[1];
+            state.drawWord=msg[2];
         }else if(msg[0]=='end'){
             state.beginGame=false;
         }

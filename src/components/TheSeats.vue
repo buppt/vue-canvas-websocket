@@ -1,15 +1,15 @@
 <template>
-
-  <div class="seatContent">
+<div class="seatContent">
 	<div class="startButton">
-	  	<button v-if="seats[0]==username" @click="begin()" component='seat'>开始游戏</button>
-		<button v-else component='seat'>一楼房主</button>
+		<button v-if="seats[0]==username" @click="begin()" component='seat'>开始游戏</button>
+		<button v-else @click="seatDown(0)"   component='seat'>一楼房主</button>
 		<div class="clear"></div>
 	</div>
-    <div v-for="(seat,index) in seats" :key="index" class="seats-block">
+	<div v-for="(seat,index) in seats" :key="index" class="seats-block">
+		<div class="drawuser" v-show="beginGame&&drawuser==seat">画</div>
 		<button type="primary" plain class="seat-num" :class="seat=='空位'?'blue':'green'" @click="seatDown(index)" component='seat'>{{seat}}</button>
 	</div>
-  </div>
+</div>
 
 </template>
 
@@ -27,31 +27,29 @@ export default {
 	  
   },
   computed:{
-        username(){
-            return this.$store.state.username.username;
+		username(){
+				return this.$store.state.username.username;
 		},
 		seats(){
 			return this.$store.state.wsStore.seats;
 		},
 		beginGame(){
 			return this.$store.state.beginGame.beginGame;
+		},
+		drawuser(){
+			return this.$store.state.beginGame.drawUser;
 		}
 	},
 	watch:{
 		beginGame(newval,oldval){
+			let buttonEle = document.querySelectorAll('button[component="seat"]');
 			if(this.beginGame){
-				let button = document.getElementsByTagName('button');
-				for(let bt of button){
-					if(bt.getAttribute("component")){
-						bt.setAttribute('disabled','disabled');
-					}
+				for(let bt of buttonEle){
+					bt.setAttribute('disabled','disabled');
 				}
 			}else{
-				let button = document.getElementsByTagName('button');
-				for(let bt of button){
-					if(bt.getAttribute("component")){
-						bt.removeAttribute('disabled');
-					}
+				for(let bt of buttonEle){
+					bt.removeAttribute('disabled');
 				}
 			}
 		}
@@ -87,6 +85,9 @@ export default {
 
 	.seats-block{
 		width: 15%;
+		.drawuser{
+			font-size: 10px;
+		}
 		.seat-num{
 			color: #fff;
 			border: 0;
@@ -102,11 +103,5 @@ export default {
 }
 .green{
 	background-color: #67c23a;
-}
-button[disabled]{
-    cursor: not-allowed; 
-}
-button{
-	cursor: pointer;
 }
 </style>

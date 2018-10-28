@@ -14,13 +14,18 @@ export default {
   name: 'DrawBoard',
   data () {
     return {
-			guassWord: 'pig',
-			draw: ''
+		//guassWord: 'pig',
+		draw: null,
     }
   },
   mounted: function(){
 		this.draw = new canvasDraw("drawBoard",this.$store.state.wsStore.ws);
 		this.draw.draw();
+  },
+  computed:{
+	  guassWord(){
+		  return this.$store.state.beginGame.drawWord;
+	  }
   },
   methods:{
 		clearDraw:function(){

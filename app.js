@@ -10,6 +10,10 @@ const wss = new WebSocketServer({
 });
 
 let seats=['空位','空位','空位','空位','空位','空位']
+let dict=['老鼠','牛','老虎','兔子','龙','蛇','马','羊','猴子','鸡','狗','猪']
+
+let gameBegin = false;
+let guassWord = '';
 wss.on('connection', function (ws) {
     console.log(`[SERVER] connection()`);
     ws.on('message', function (message) {
@@ -26,12 +30,15 @@ wss.on('connection', function (ws) {
             })
         }else if(msg[0]=='begin'){
             function settime(username,ms){
+                let i = Math.floor(Math.random()*dict.length);
                 setTimeout(()=>{
+                    guassWord=dict[i];
                     wss.clients.forEach((client) => {
-                        client.send(`begin,${username},${ms}`)
+                        client.send(`begin,${username},${dict[i]}`)
                     })
                 },ms)
             }
+            gameBegin=true;
             let ms = 0;
             for(let username of seats){
                 if(username!='空位'){
@@ -43,7 +50,12 @@ wss.on('connection', function (ws) {
                 wss.clients.forEach((client) => {
                     client.send(`end,`)
                 })
+                gameBegin=false;
             },ms)
+        }else if(gameBegin&&msg[0]=='chat'&&msg[2]==guassWord){
+            wss.clients.forEach((client) => {
+                client.send(`chat,${msg[1]},猜对啦！`)
+            })
         }else{
             wss.clients.forEach((client) => {
                     client.send(message)

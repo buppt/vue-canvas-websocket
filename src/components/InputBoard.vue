@@ -1,8 +1,8 @@
 <template>
 <div>
   <div class="totalBoard">
-    <input class='inputContent' type="text" v-model="guassWord" placeholder="这里输入内容" @keydown.enter="submitWord"/>
-    <el-button type="primary" class="submitButton" @click="submitWord" >发送</el-button>
+    <input class='inputContent' type="text" v-model="guassWord" placeholder="这里输入内容" @keydown.enter="submitWord" component="inputBoard"/>
+    <el-button type="primary" class="submitButton" @click="submitWord" component="inputBoard" >发送</el-button>
   </div>
 </div>
 </template>
@@ -20,6 +20,22 @@ export default {
         username(){
             return this.$store.state.username.username;
         },
+        drawuser(){
+            return this.$store.state.beginGame.drawUser;
+        },
+    },
+    watch:{
+        drawuser(newval,oldval){
+            let inputEle = document.querySelector('input[component="inputBoard"]');
+            let buttonEle = document.querySelector('button[component="inputBoard"]');
+            if(this.drawuser==this.username){
+                inputEle.setAttribute('disabled','disabled')
+                buttonEle.setAttribute('disabled','disabled');
+            }else{
+                inputEle.removeAttribute('disabled');
+                buttonEle.removeAttribute('disabled');
+            }
+        }
     },
     methods:{
         submitWord(){
