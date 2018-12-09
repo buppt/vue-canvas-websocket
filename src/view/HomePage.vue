@@ -46,6 +46,8 @@ export default {
 <style scoped>
 .homePage{
 	height: 100%;
-	background-image: url('/static/background.jpg')
+	/* background-image: url('/static/background.jpg') */
+	background-color: #fff;
+	position: relative;
 }
 </style>

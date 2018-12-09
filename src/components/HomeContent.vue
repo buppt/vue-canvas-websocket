@@ -1,21 +1,20 @@
 <template>
   <div class='homeContent'>
-		<div class="content">
-			<div class="boardleft">
-				<div class="showBoard">
-					<div v-if="beginGame">当前画家：{{drawuser}}  剩余时间：{{second}}</div>
-					<div v-else>请等待一楼开始游戏</div>
-					<draw-board v-if="beginGame&&drawuser==username"></draw-board>
-					<show-board v-else></show-board>
-				</div>
-				<the-seats class="seat"></the-seats>
+		<div class="boardleft">
+			<div class="showBoard">
+				<div v-if="beginGame">当前画家：{{drawuser}}  剩余时间：{{second}}</div>
+				<div v-else>请等待一楼开始游戏</div>
+				<show-board v-if="(beginGame&&drawuser!=username)"></show-board>
+				<draw-board v-else></draw-board>
+				
 			</div>
-			<div class="boardright">
-				<chat-board class="chatBoard"></chat-board>
-				<input-board class="inputBoard"></input-board>
-			</div>
-			<div class="clear"></div>
+			<the-seats class="seat"></the-seats>
 		</div>
+		<div class="boardright">
+			<chat-board class="chatBoard"></chat-board>
+			<input-board class="inputBoard"></input-board>
+		</div>
+		<div class="clear"></div>
 		<!-- <draw-board v-else class="showBoard" :ws="ws" ></draw-board>
 		<TheSeats class="theSeats" :ws="ws" :username="username" :msg="msg" @event="beginGame"></TheSeats> -->
   </div>
@@ -80,39 +79,44 @@ export default {
 
 <style lang='less' scoped>
 .homeContent{
-	padding-top: 30px;
+	position: absolute;
+	//overflow: hidden;
 	text-align: center;
-	.content{
-		 width: 1010px;
-		 height: 550px;
-		 margin: 0 auto;
-		.boardleft{
-			float: left;
-			border: 1px solid #000;
-			height: 100%;
-			width: 69%;
-			.showBoard{
-				height: 88%;
-			}
-			.seat{
-				border-top: 1px solid #000;
-				height: 12%;				
-			}
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	bottom: 30px;
+	top: 70px;
+	right: 30px;
+	left: 0;
+	.boardleft{
+		flex: 3;
+		//border: 1px solid #e5e4e4;
+		margin-left: 30px;
+		.showBoard{
+			height: 88%;
 		}
-		.boardright{
-			float: right;
-			border: 1px solid #000;
-			height: 100%;
-			width: 29%;
-			.chatBoard{
-				height: 88%;
-			}
-			.inputBoard{
-				border-top: 1px solid #000;
-				height: 12%;	
-			}
+		.seat{
+			border: 1px solid #e5e4e4;
+			height: 12%;				
 		}
 	}
+	.boardright{
+		margin-left: 30px;
+		flex: 1;
+		border: 1px solid #e5e4e4;
+		border-radius: 5px;
+		
+		.chatBoard{
+			height: 88%;
+			background-color: #fff;
+		}
+		.inputBoard{
+			border-top: 1px solid #e5e4e4;
+			height: 12%;	
+		}
+	}
+	
 }
 .clear{
 	clear: both;

@@ -89,12 +89,13 @@ export default {
 <style lang='less' scoped>
 .header{
     position: relative;
-    height: 42px;
-    line-height: 42px;
+    height: 50px;
+    line-height: 50px;
     color: #222;
     width: 100%;
     text-align: center;
-    background-color: hsla(0,0%,100%,.4);
+    font-size: 17px;
+    background-color: rgba(255,255,255,1);
     -webkit-box-shadow: rgba(0,0,0,.1) 0 1px 2px;
     box-shadow: 0 1px 2px rgba(0,0,0,.1);
     .header-content{
@@ -109,6 +110,7 @@ export default {
         .header-left{
             float: left;
             cursor: pointer;
+            font-size: 20px;
         }
         .header-right{
             float: right;

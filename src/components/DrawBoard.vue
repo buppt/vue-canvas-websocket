@@ -1,10 +1,44 @@
 <template>
-  <div>
-    <canvas id="drawBoard" width="650" height="400"></canvas>
+	<div>
+  	<div class="drawBoard">
+		<div class="canvasSetting">
+			<label><input name="drawType" type="radio" value="画笔" v-model="drawType"/>画笔 </label> 
+			<br/>
+			<label><input name="drawType" type="radio" value="直线" v-model="drawType"/>直线 </label> 
+			<br/>
+			<label><input name="drawType" type="radio" value="矩形" v-model="drawType"/>矩形 </label> 
+			<br/>
+			<label><input name="drawType" type="radio" value="圆" v-model="drawType"/>圆 </label> 
+			<br/>
+			填充颜色：
+			<input type="color" v-model="fillColor"/> 
+			<br/>
+			选择颜色：
+			<input type="color" v-model="drawColor"/> 
+			<br/>
+			笔粗细
+			<input type="range" v-model="drawLineWidth" min="1" max="10" />{{drawLineWidth}}
+			线端点类型
+			<select v-model="lineEndType">
+				<option>默认</option>
+				<option>半圆</option>
+				<option>矩形</option>
+			</select>
+			线交点类型
+			<select v-model="lineNodeType">
+				<option>默认</option>
+				<option>半圆</option>
+				<option>斜角</option>
+			</select>
+
+		</div>
+		<canvas id="drawBoard" width="700" height="450"></canvas>
+	</div>
 	<br/>
-	<div class="guassWord">要画的词是：{{guassWord}}</div>
+	<div v-show="guassWord" class="guassWord">要画的词是：{{guassWord}}</div>
 	<button class="clearButton" @click="clearDraw()">clear</button>
 	<div class="clear"></div>
+	
   </div>
 </template>
 
@@ -16,11 +50,55 @@ export default {
     return {
 		//guassWord: 'pig',
 		draw: null,
+		drawColor: '#000000',
+		fillColor:'#000000',
+		drawLineWidth: 1,
+		drawType: '画笔',
+		lineEndType: '默认',
+		lineNodeType: '默认',
     }
   },
   mounted: function(){
 		this.draw = new canvasDraw("drawBoard",this.$store.state.wsStore.ws);
 		this.draw.draw();
+  },
+  watch:{
+	  drawColor(){
+		  this.draw.changeColor(this.drawColor);
+	  },
+	  drawLineWidth(){
+		  this.draw.changeLineWidth(this.drawLineWidth)
+	  },
+	  fillColor(){
+		  this.draw.changeFillColor(this.fillColor)
+	  },
+	  drawType(){
+		  if(this.drawType=='直线'){
+			  this.draw.drawLine();
+		  }else if(this.drawType=='矩形'){
+			  this.draw.drawRect();
+		  }else if(this.drawType=='圆'){
+			  this.draw.drawRound();
+		  }else{
+			  this.draw.draw();
+		  }
+	  },
+	  lineEndType(){
+		  let lineEndType={
+			  '默认': 'butt',
+			  '半圆': 'round',
+			  '矩形': 'square'
+		  }
+		  this.draw.changeLineEnd(lineEndType[this.lineEndType]);
+	  },
+	  lineNodeType(){
+		  let lineNodeType={
+			  '默认': 'miter',
+			  '半圆': 'round',
+			  '斜角': 'bevel'
+		  }
+		  this.draw.changeLineNode(lineNodeType[this.lineNodeType]);
+	  }
   },
   computed:{
 	  guassWord(){
@@ -47,10 +125,74 @@ class canvasDraw{
 		}
 		this.isDraw=false
 	}
+	changeColor(color){
+		this.ctx.strokeStyle = color;
+	}
+	changeLineWidth(lineWidth){
+		this.ctx.lineWidth = lineWidth;
+	}
+	changeFillColor(color){
+		this.ctx.fillStyle = color;
+	}
+	changeLineEnd(lineEndtype){
+		this.ctx.lineCap = lineEndtype;
+	}
+	changeLineNode(lineNode){
+		this.ctx.lineJoin = lineNode;
+	}
+	drawLine(){
+		this.canvas.onmousedown=()=>{
+			this.ctx.beginPath()
+			this.path.beginX = event.pageX - this.stage_info.left
+			this.path.beginY = event.pageY - this.stage_info.top
+			this.ctx.moveTo(
+				this.path.beginX,
+				this.path.beginY
+			)
+		}
+		this.canvas.onmouseup=()=>{
+			this.path.endX = event.pageX - this.stage_info.left
+			this.path.endY = event.pageY - this.stage_info.top
+			this.ctx.lineTo(
+				this.path.endX,
+				this.path.endY
+			)
+			this.ctx.stroke();
+		}
+	}
+	drawRect(){
+		this.canvas.onmousedown=()=>{
+			this.ctx.beginPath()
+			this.path.beginX = event.pageX - this.stage_info.left
+			this.path.beginY = event.pageY - this.stage_info.top
+		}
+		this.canvas.onmouseup=()=>{
+			this.path.endX = event.pageX - this.stage_info.left
+			this.path.endY = event.pageY - this.stage_info.top
+			this.ctx.rect(this.path.beginX, this.path.beginY, this.path.endX-this.path.beginX, this.path.endY-this.path.beginY);
+			this.ctx.fill();
+			this.ctx.stroke();
+		}
+	}
+	drawRound(){
+		this.canvas.onmousedown=()=>{
+			this.ctx.beginPath()
+			this.path.beginX = event.pageX - this.stage_info.left
+			this.path.beginY = event.pageY - this.stage_info.top
+		}
+		this.canvas.onmouseup=()=>{
+			this.path.endX = event.pageX - this.stage_info.left
+			this.path.endY = event.pageY - this.stage_info.top
+			let width = this.path.endX-this.path.beginX;
+			let height = this.path.endY-this.path.beginY;
+			this.ctx.arc(this.path.beginX+width/2, this.path.beginY+height/2,Math.sqrt(width*width+height*height)/2,0, Math.PI *2);
+			this.ctx.fill();
+			this.ctx.stroke();
+		}
+	}
 	draw(){
 		let that = this
 		this.canvas.onmousedown = () => {
-			that.ctx.strokeStyle = "#000"
 			that.ctx.beginPath()
 			that.path.beginX = event.pageX - that.stage_info.left
 			that.path.beginY = event.pageY - that.stage_info.top
@@ -91,9 +233,21 @@ class canvasDraw{
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-/* #drawBoard { 
+.drawBoard{
+	text-align: left;
+	display: flex;
+	margin-top: 10px;
+}
+.canvasSetting{
+	flex: 1;
+}
+input[type="range"]{
+	width: 45%;
+}
+#drawBoard { 
 	border: 1px solid black; 
-} */
+	flex: 5;
+}
 .guassWord{
 	float: left;
 	margin-left: 20px;
