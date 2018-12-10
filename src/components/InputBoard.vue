@@ -39,9 +39,13 @@ export default {
     },
     methods:{
         submitWord(){
+            if(this.$store.state.wsStore.ws.readyState==3){
+                this.$message('服务器未连接');
+                return ;
+            }
             if(this.username==null||this.username==''){
                 this.$message('请登陆');
-                return
+                return ;
             }
             if(this.guassWord!=''){
                 this.$store.state.wsStore.ws.send(`chat,${this.username},${this.guassWord}`);

@@ -34,7 +34,7 @@
 			</select>
 
 		</div>
-		<canvas id="drawBoard" width="700" height="450"></canvas>
+		<canvas id="drawBoard" width="700" height="400"></canvas>
         <button class="clearButton" @click="clearDraw()">clear</button>
 	</div>
 	<br/>

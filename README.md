@@ -4,10 +4,9 @@
 
 ```
 npm install
-
+//start server
 node app.js
-
-//another terminal
+//start vue in another terminal
 npm run dev
 ```
 

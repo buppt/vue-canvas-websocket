@@ -23,8 +23,6 @@ export default {
 		this.$store.commit('wsStore/connect',ws);
 		let self=this;
 		ws.onmessage = (message)=>{
-			console.log(message.data);
-			
 			let msg = message.data.split(',')
 			if(msg[0]=="seats"){
 				self.$store.commit('wsStore/changeSeats',msg.slice(1,7));

@@ -20,7 +20,6 @@ export default {
   data () {
     return {
       buttonShow: '空位',
-	  //seats:['空位','空位','空位','空位','空位','空位'],
     }
   },
   mounted(){
@@ -56,6 +55,10 @@ export default {
 	},
   methods:{
 	seatDown(index){
+		if(this.$store.state.wsStore.ws.readyState==3){
+			this.$message('服务器未连接');
+			return ;
+		}
 		if(this.username==null||this.username==''){
 			this.$message('请登陆');
 		}else if(this.seats[index]=='空位'){
