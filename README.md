@@ -1,22 +1,23 @@
 # vue+canvas+websocket+less
 
-## Build Setup
+为了学习canvas和websocket做的，<a href="https://buppt.github.io/vue-canvas-websocket/dist/">可以点击这里查看</a>。
 
-```
+## 项目截图
+<img src='./GIF.gif' width="80%">
+<img src='./GIF1.gif' width="80%">
+
+## 项目架构
+<img src='./structure.PNG' />
+
+## Build Setup
+```bash
+//clone
 npm install
 //start server
 node app.js
 //start vue in another terminal
 npm run dev
 ```
-
-
-## 项目架构
-
-<img src='./structure.PNG' />
-
-## 项目截图
-<img src='./screenshot.PNG'>
 
 ## 完成进度
 
