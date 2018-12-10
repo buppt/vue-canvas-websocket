@@ -43,7 +43,7 @@ wss.on('connection', function (ws) {
             for(let username of seats){
                 if(username!='空位'){
                     settime(username,ms)
-                    ms+=4000;
+                    ms+=10000;
                 }
             }
             setTimeout(()=>{

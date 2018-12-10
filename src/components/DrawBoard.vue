@@ -18,13 +18,15 @@
 			<br/>
 			笔粗细
 			<input type="range" v-model="drawLineWidth" min="1" max="10" />{{drawLineWidth}}
+            <br/>
 			线端点类型
 			<select v-model="lineEndType">
 				<option>默认</option>
 				<option>半圆</option>
 				<option>矩形</option>
 			</select>
-			线交点类型
+            <br/>
+			矩形角类型
 			<select v-model="lineNodeType">
 				<option>默认</option>
 				<option>半圆</option>
@@ -33,11 +35,9 @@
 
 		</div>
 		<canvas id="drawBoard" width="700" height="450"></canvas>
+        <button class="clearButton" @click="clearDraw()">clear</button>
 	</div>
 	<br/>
-	<div v-show="guassWord" class="guassWord">要画的词是：{{guassWord}}</div>
-	<button class="clearButton" @click="clearDraw()">clear</button>
-	<div class="clear"></div>
 	
   </div>
 </template>
@@ -98,11 +98,6 @@ export default {
 			  '斜角': 'bevel'
 		  }
 		  this.draw.changeLineNode(lineNodeType[this.lineNodeType]);
-	  }
-  },
-  computed:{
-	  guassWord(){
-		  return this.$store.state.beginGame.drawWord;
 	  }
   },
   methods:{
@@ -234,27 +229,28 @@ class canvasDraw{
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .drawBoard{
-	text-align: left;
-	display: flex;
+	text-align: center;
 	margin-top: 10px;
+    white-space: nowrap;
 }
 .canvasSetting{
-	flex: 1;
+    vertical-align:top;
+    text-align: left;
+	width: 150px;
+    display: inline-block;
 }
 input[type="range"]{
 	width: 45%;
 }
 #drawBoard { 
 	border: 1px solid black; 
-	flex: 5;
 }
 .guassWord{
 	float: left;
 	margin-left: 20px;
 }
 .clearButton{
-	margin-right: 20px;
-	float: right;
+	vertical-align: bottom;
 }
 .clear{
 	clear:both;

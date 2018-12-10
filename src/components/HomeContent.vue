@@ -6,7 +6,7 @@
 				<div v-else>请等待一楼开始游戏</div>
 				<show-board v-if="(beginGame&&drawuser!=username)"></show-board>
 				<draw-board v-else></draw-board>
-				
+				<div v-show="beginGame&&drawuser==username" class="guassWord">要画的词是：{{guassWord}}</div>
 			</div>
 			<the-seats class="seat"></the-seats>
 		</div>
@@ -38,7 +38,7 @@ export default {
 	data () {
 		return {
 			x: 1,
-			second: 3,
+			second: 9,
 		}
 	},
 	computed:{
@@ -50,12 +50,15 @@ export default {
 		},
 		beginGame(){
 			return this.$store.state.beginGame.beginGame;
-		}
+		},
+        guassWord(){
+		  return this.$store.state.beginGame.drawWord;
+        }
 	},
 	watch:{
 		drawuser(newval,oldval){
 			console.log(newval)
-			this.second=3;
+			this.second=9;
 			this.countDown();
 		}
 	},
@@ -64,7 +67,6 @@ export default {
 			this.x=!this.x;
 		},
 		countDown(){
-			console.log(this.second)
 			if(this.second>0){
 				let self = this;
 				setTimeout(()=>{
