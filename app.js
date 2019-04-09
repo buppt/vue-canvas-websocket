@@ -1,4 +1,15 @@
-// 导入WebSocket模块:
+class Dep{
+    constructor(){
+        this.subs = [];
+    }
+    addSub(data){
+        this.subs.push(data);
+    }
+    notify(data){
+        this.subs.forEach( sub => sub.send(data));
+    }
+}
+
 const WebSocket = require('ws');
 
 // 引用Server类:
@@ -14,10 +25,11 @@ let dict=['老鼠','牛','老虎','兔子','龙','蛇','马','羊','猴子','鸡
 
 let gameBegin = false;
 let guassWord = '';
+let dep = new Dep();
 wss.on('connection', function (ws) {
     console.log(`[SERVER] connection()`);
+    dep.addSub(ws)
     ws.on('message', function (message) {
-        console.log(`[SERVER] Received: ${message}`);
         let msg = message.split(',');
         if(msg[0]=="seats"&&msg.length==3){
             let i = seats.indexOf(msg[2])
@@ -25,41 +37,35 @@ wss.on('connection', function (ws) {
                 seats[i]='空位';
             }
             seats[msg[1]]=msg[2];
-            wss.clients.forEach((client) => {
-                client.send(`seats,${seats}`)
-            })
+            dep.notify(`seats,${seats}`)
+            
         }else if(msg[0]=='begin'){
-            function settime(username,ms){
-                let i = Math.floor(Math.random()*dict.length);
-                setTimeout(()=>{
-                    guassWord=dict[i];
-                    wss.clients.forEach((client) => {
-                        client.send(`begin,${username},${dict[i]}`)
-                    })
-                },ms)
+            function settime(){
+                return new Promise((resolve)=>{
+                    setTimeout(()=>{
+                        resolve()
+                    },10000)
+                })
             }
             gameBegin=true;
-            let ms = 0;
-            for(let username of seats){
-                if(username!='空位'){
-                    settime(username,ms)
-                    ms+=10000;
+            (async function(){
+                for(let i in seats){
+                    if(seats[i] != '空位'){
+                        var index = Math.floor(Math.random()*dict.length);
+                        guassWord=dict[index];
+                        dep.notify(`begin,${seats[i]},${dict[index]}`)
+                        await settime()
+                    }
                 }
-            }
-            setTimeout(()=>{
-                wss.clients.forEach((client) => {
-                    client.send(`end,`)
-                })
+                dep.notify(`end,`)
                 gameBegin=false;
-            },ms)
+            })()
+            
+            
         }else if(gameBegin&&msg[0]=='chat'&&msg[2]==guassWord){
-            wss.clients.forEach((client) => {
-                client.send(`chat,${msg[1]},猜对啦！`)
-            })
+            dep.notify(`chat,${msg[1]},猜对啦！`)
         }else{
-            wss.clients.forEach((client) => {
-                    client.send(message)
-            })
+            dep.notify(message)
         }
 		 
     })

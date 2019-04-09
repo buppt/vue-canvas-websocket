@@ -6,8 +6,6 @@
 <img src='./GIF.gif' width="80%">
 <img src='./GIF1.gif' width="80%">
 
-## 项目架构
-<img src='./structure.PNG' />
 
 ## Build Setup
 ```bash
