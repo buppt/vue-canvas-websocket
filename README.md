@@ -1,6 +1,6 @@
 # vue+canvas+websocket+less
 
-为了学习canvas和websocket做的，<a href="https://buppt.github.io/vue-canvas-websocket/dist/">可以点击这里查看</a>。
+为了学习canvas和websocket做的一个小游戏，<a href="https://buppt.github.io/vue-canvas-websocket/dist/">可以点击这里在线查看</a>。求star～
 
 ## 项目截图
 <img src='./GIF.gif' width="80%">
